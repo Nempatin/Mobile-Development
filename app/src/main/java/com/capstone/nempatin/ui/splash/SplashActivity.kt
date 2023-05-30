@@ -2,6 +2,7 @@ package com.capstone.nempatin.ui.splash
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.capstone.nempatin.R
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
