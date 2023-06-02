@@ -2,6 +2,7 @@ package com.capstone.nempatin.ui.upload
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.capstone.nempatin.R
 
 class UploadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
