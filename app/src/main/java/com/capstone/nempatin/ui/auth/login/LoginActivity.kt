@@ -12,7 +12,6 @@ import com.capstone.nempatin.ui.auth.register.SignUpActivity
 import com.capstone.nempatin.ui.main.MainActivity
 import com.capstone.nempatin.utils.GoogleSignInHelper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseUser
 
@@ -28,6 +27,10 @@ class LoginActivity : AppCompatActivity() {
 
         val authSource = FirebaseAuthSource()
         userManager = UserManager(authSource)
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = userManager.getCurrentUser()
+        updateUI(currentUser)
 
         binding.btnGoogleSignIn.setOnClickListener {
             val googleSignInHelper = GoogleSignInHelper(this, RC_SIGN_IN)
