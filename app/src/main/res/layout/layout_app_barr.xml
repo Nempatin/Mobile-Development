@@ -4,7 +4,7 @@
     android:id="@+id/my_toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
+    android:background="@color/colorQuaternary"
     android:elevation="4dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -19,7 +19,7 @@
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/linearlogo" />
+            app:srcCompat="@drawable/linearlogoappbar" />
 
         <ImageButton
             android:id="@+id/profile_button"
