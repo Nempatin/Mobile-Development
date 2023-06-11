@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:fontFamily="@font/mulish"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:minHeight="48dp" />
@@ -31,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:fontFamily="@font/mulish"
         android:hint="Password"
         android:inputType="textPassword"
         android:minHeight="48dp" />
@@ -39,6 +41,7 @@
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/mulish"
         android:text="Login" />
 
     <TextView
@@ -47,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/mulish_extralight"
         android:gravity="center"
         android:text="OR" />
 
@@ -77,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
+            android:fontFamily="@font/mulish"
             android:text="SignUp"
             android:textStyle="bold" />
     </LinearLayout>
