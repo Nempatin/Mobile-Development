@@ -60,12 +60,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/mulish"
-                android:text="Recently Added"
+                android:text="Latest Added"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_newproperty"
+                android:id="@+id/recycler_view_latestadded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -75,12 +75,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/mulish"
-                android:text="Recently Added"
+                android:text="By your Location"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_moreproperty"
+                android:id="@+id/recycler_view_newproperty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

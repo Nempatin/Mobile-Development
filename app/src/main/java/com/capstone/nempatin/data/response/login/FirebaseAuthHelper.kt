@@ -1,4 +1,4 @@
-package com.capstone.nempatin.utils
+package com.capstone.nempatin.data.response.login
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task

@@ -2,15 +2,16 @@ package com.capstone.nempatin.ui.auth.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.service.controls.ControlsProviderService.TAG
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.capstone.nempatin.R
 import com.capstone.nempatin.data.response.login.FirebaseAuthSource
 import com.capstone.nempatin.databinding.ActivityLoginBinding
 import com.capstone.nempatin.domain.UserManager
 import com.capstone.nempatin.ui.auth.register.SignUpActivity
 import com.capstone.nempatin.ui.main.MainActivity
-import com.capstone.nempatin.utils.GoogleSignInHelper
+import com.capstone.nempatin.data.response.login.GoogleSignInHelper
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseUser
@@ -73,16 +74,21 @@ class LoginActivity : AppCompatActivity() {
                             val user = userManager.getCurrentUser()
                             updateUI(user)
                         } else {
+                            Log.e(TAG, "signInWithGoogle:failure", task.exception)
                             Toast.makeText(baseContext, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
                             updateUI(null)
                         }
                     }
             } catch (e: ApiException) {
-                Toast.makeText(this, "Google sign in failed.", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Google sign in failed", e)
+                Toast.makeText(baseContext, "Google sign in failed.",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {

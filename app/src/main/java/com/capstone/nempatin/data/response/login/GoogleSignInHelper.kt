@@ -1,4 +1,4 @@
-package com.capstone.nempatin.utils
+package com.capstone.nempatin.data.response.login
 
 import android.app.Activity
 import android.content.Intent

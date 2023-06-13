@@ -4,16 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.capstone.nempatin.R
 import com.capstone.nempatin.databinding.ActivitySignupBinding
-import com.capstone.nempatin.utils.FirebaseAuthHelper
-import com.capstone.nempatin.utils.GoogleSignInHelper
+import com.capstone.nempatin.data.response.login.FirebaseAuthHelper
+import com.capstone.nempatin.data.response.login.GoogleSignInHelper
 import com.capstone.nempatin.utils.UiUpdater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
