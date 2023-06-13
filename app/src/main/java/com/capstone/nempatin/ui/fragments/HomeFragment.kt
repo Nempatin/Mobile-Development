@@ -1,6 +1,8 @@
 package com.capstone.nempatin.ui.fragments
 
 import PropertyAdapter
+import android.view.View
+import androidx.core.util.Pair
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
 import com.capstone.nempatin.data.dummy.PropertyDataGenerator
 import com.capstone.nempatin.domain.Property
+import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
 import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.utils.LocationUtils
@@ -86,7 +90,15 @@ class HomeFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                // Perform your search operation here
+                val searchIntent = Intent(activity, SearchActivity::class.java)
+                searchIntent.putExtra("query", query)
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    Pair.create(searchView as View, "search_bar_transition")
+                )
+
+                ActivityCompat.startActivity(requireActivity(), searchIntent, options.toBundle())
                 return false
             }
 
@@ -95,6 +107,7 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
+
 
         if (checkLocationPermission()) {
             getCurrentLocation()
