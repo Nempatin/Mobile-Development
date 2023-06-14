@@ -8,5 +8,11 @@
 
     <string name="your_web_client_id">9579574041-e0lani2th93qi6b2orpncu0qquptkr1d.apps.googleusercontent.com</string>
     <string name="back_button">back</string>
+    <string name="land_area">area land</string>
+    <string name="building_area">building area</string>
+    <string name="certificate">certificate</string>
+    <string name="bedroom">bedroom</string>
+    <string name="bathroom">bathroom</string>
+    <string name="garage">garage</string>
 
 </resources>

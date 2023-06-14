@@ -1,6 +1,6 @@
 package com.capstone.nempatin.ui.fragments
 
-import PropertyAdapter
+import NearbyAdapter
 import android.view.View
 import androidx.core.util.Pair
 import android.Manifest
@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
-    private lateinit var propertyAdapter: PropertyAdapter
+    private lateinit var nearbyAdapter: NearbyAdapter
     private lateinit var latestAddedAdapter: LatestAddedAdapter
     private val viewModel: PropertyViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -51,29 +51,26 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val propertyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_newproperty)
+        val propertyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_nearby)
         propertyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        propertyAdapter = PropertyAdapter()
+        nearbyAdapter = NearbyAdapter()
 
         val latestAddedRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_latestadded)
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(latestAddedRecyclerView)
         latestAddedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        latestAddedAdapter = LatestAddedAdapter()
+        // Load data and update adapter for latest added properties
+        val latestAddedProperties = PropertyDataGenerator().createDummyPropertyList()
+        latestAddedAdapter = LatestAddedAdapter(latestAddedProperties)
 
-        propertyRecyclerView.adapter = propertyAdapter
+        propertyRecyclerView.adapter = nearbyAdapter
         latestAddedRecyclerView.adapter = latestAddedAdapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.flow.collectLatest { pagingData: PagingData<Property> ->
-                propertyAdapter.submitData(pagingData)
+                nearbyAdapter.submitData(pagingData)
             }
         }
-
-        // Load data and update adapter for latest added properties
-        val latestAddedProperties = PropertyDataGenerator().createDummyPropertyList()
-        latestAddedAdapter = LatestAddedAdapter(latestAddedProperties)
-        latestAddedRecyclerView.adapter = latestAddedAdapter
 
         val profileButton: ImageButton = view.findViewById(R.id.profile_button)
         profileButton.setOnClickListener {
@@ -107,7 +104,6 @@ class HomeFragment : Fragment() {
                 return false
             }
         })
-
 
         if (checkLocationPermission()) {
             getCurrentLocation()
@@ -174,7 +170,7 @@ class HomeFragment : Fragment() {
 
         val filteredProperties = LocationUtils.filterNearestLocations(latitude, longitude, propertyList)
         val pagingData = PagingData.from(filteredProperties)
-        propertyAdapter.submitData(lifecycle, pagingData)
+        nearbyAdapter.submitData(lifecycle, pagingData)
     }
 
     companion object {
