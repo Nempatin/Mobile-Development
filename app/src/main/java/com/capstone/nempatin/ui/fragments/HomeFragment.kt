@@ -16,28 +16,24 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
 import com.capstone.nempatin.data.dummy.PropertyDataGenerator
-import com.capstone.nempatin.domain.Property
 import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
 import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.utils.LocationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var nearbyAdapter: NearbyAdapter
     private lateinit var latestAddedAdapter: LatestAddedAdapter
-    private val viewModel: PropertyViewModel by viewModels()
+    private val viewModel by lazy {
+        ViewModelProvider(this, PropertyViewModelFactory(apiService)).get(PropertyViewModel::class.java)
+    }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,26 +47,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val propertyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_nearby)
-        propertyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val nearbyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_nearby)
+        nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         nearbyAdapter = NearbyAdapter()
+        nearbyRecyclerView.adapter = nearbyAdapter
 
         val latestAddedRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_latestadded)
-        val snapHelper = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(latestAddedRecyclerView)
         latestAddedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        // Load data and update adapter for latest added properties
-        val latestAddedProperties = PropertyDataGenerator().createDummyPropertyList()
-        latestAddedAdapter = LatestAddedAdapter(latestAddedProperties)
-
-        propertyRecyclerView.adapter = nearbyAdapter
+        latestAddedAdapter = LatestAddedAdapter()
         latestAddedRecyclerView.adapter = latestAddedAdapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.flow.collectLatest { pagingData: PagingData<Property> ->
-                nearbyAdapter.submitData(pagingData)
-            }
-        }
+        viewModel.properties.observe(viewLifecycleOwner, { properties ->
+            nearbyAdapter.addProperties(properties)
+            latestAddedAdapter.addProperties(properties)
+        })
 
         val profileButton: ImageButton = view.findViewById(R.id.profile_button)
         profileButton.setOnClickListener {
@@ -169,8 +159,8 @@ class HomeFragment : Fragment() {
         val propertyList = dataGenerator.createDummyPropertyList()
 
         val filteredProperties = LocationUtils.filterNearestLocations(latitude, longitude, propertyList)
-        val pagingData = PagingData.from(filteredProperties)
-        nearbyAdapter.submitData(lifecycle, pagingData)
+        nearbyAdapter.addProperties(filteredProperties)
+        latestAddedAdapter.addProperties(filteredProperties)
     }
 
     companion object {

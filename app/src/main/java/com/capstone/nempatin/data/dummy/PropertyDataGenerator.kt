@@ -9,7 +9,7 @@ class PropertyDataGenerator {
         propertyList.add(
             Property(
                 "Rumah Murah Bekasi",
-                "Bekasi",
+                "Bantar Gebang, Bekasi",
                 -6.223945,
                 106.9862751,
                 3800000000,

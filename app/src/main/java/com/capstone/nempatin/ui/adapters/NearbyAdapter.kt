@@ -3,13 +3,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
 import com.capstone.nempatin.domain.Property
 
-class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHolder>(PropertyDiffCallback()) {
+
+class NearbyAdapter : RecyclerView.Adapter<NearbyAdapter.PropertyViewHolder>() {
+
+    private var properties: MutableList<Property> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_property_2, parent, false)
@@ -17,8 +18,22 @@ class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHold
     }
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
-        val property = getItem(position)
-        property?.let { holder.bind(it) }
+        val property = properties[position]
+        holder.bind(property)
+    }
+
+    override fun getItemCount(): Int {
+        return properties.size
+    }
+
+    fun setProperties(properties: List<Property>) {
+        this.properties = properties.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    fun addProperties(properties: List<Property>) {
+        this.properties.addAll(properties)
+        notifyItemRangeInserted(this.properties.size - properties.size, properties.size)
     }
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,16 +48,6 @@ class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHold
             titleTextView.text = property.name
             priceTextView.text = property.price.toString()
             contentTextView.text = property.city
-        }
-    }
-
-    private class PropertyDiffCallback : DiffUtil.ItemCallback<Property>() {
-        override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
-            return oldItem.name == newItem.name
-        }
-
-        override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean {
-            return oldItem == newItem
         }
     }
 }

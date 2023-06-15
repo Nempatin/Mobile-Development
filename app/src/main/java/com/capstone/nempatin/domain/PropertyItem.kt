@@ -1,6 +1,7 @@
 package com.capstone.nempatin.domain
 
 data class Property(
+    val id: Int,
     val name: String,
     val city: String,
     val latitude: Double,
@@ -13,6 +14,7 @@ data class Property(
     val garage: String,
     val certificate: String,
     val phoneNumber: Long,
-    val timestamp: Long
+    val timestamp: Long,
+    var placeId: String? = null  // Add this line
 )
 

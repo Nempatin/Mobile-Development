@@ -1,32 +1,34 @@
 package com.capstone.nempatin.ui.profile
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.capstone.nempatin.R
-import com.capstone.nempatin.ui.auth.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.capstone.nempatin.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var binding: ActivityProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        auth = FirebaseAuth.getInstance()
+        // Load current user information
+        loadUserInfo()
 
-        val signOutButton: Button = findViewById(R.id.sign_out)
-        signOutButton.setOnClickListener {
-            // Sign out from Firebase Auth
-            auth.signOut()
+        binding.signOut.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            // You might want to navigate the user back to the Login screen after signing out
+        }
+    }
 
-            // Return to login activity after signing out
-            val loginIntent = Intent(this, LoginActivity::class.java)
-            startActivity(loginIntent)
-            finish()
+    private fun loadUserInfo() {
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            binding.email.text = user.email
+            // You can also load other user info here
         }
     }
 }
