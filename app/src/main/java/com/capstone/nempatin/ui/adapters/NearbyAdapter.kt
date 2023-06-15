@@ -3,14 +3,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
 import com.capstone.nempatin.domain.Property
 
-
-class NearbyAdapter : RecyclerView.Adapter<NearbyAdapter.PropertyViewHolder>() {
-
-    private var properties: MutableList<Property> = mutableListOf()
+class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHolder>(PropertyDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_property_2, parent, false)
@@ -18,17 +17,10 @@ class NearbyAdapter : RecyclerView.Adapter<NearbyAdapter.PropertyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
-        val property = properties[position]
-        holder.bind(property)
-    }
-
-    override fun getItemCount(): Int {
-        return properties.size
-    }
-
-    fun addProperties(properties: List<Property>) {
-        this.properties.addAll(properties)
-        notifyItemRangeInserted(this.properties.size - properties.size, properties.size)
+        val property = getItem(position)
+        if (property != null) {
+            holder.bind(property)
+        }
     }
 
     class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,10 +31,21 @@ class NearbyAdapter : RecyclerView.Adapter<NearbyAdapter.PropertyViewHolder>() {
 
         fun bind(property: Property) {
             // Bind property data to views
-            imageView.setImageResource(R.drawable.download)
+            imageView.setImageResource(R.drawable.download) // Update with actual image loading
             titleTextView.text = property.name
             priceTextView.text = property.price.toString()
             contentTextView.text = property.city
         }
     }
+
+    class PropertyDiffCallback : DiffUtil.ItemCallback<Property>() {
+        override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
+

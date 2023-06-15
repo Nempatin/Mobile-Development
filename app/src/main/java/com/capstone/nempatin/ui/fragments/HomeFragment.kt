@@ -17,16 +17,24 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
+import androidx.paging.filter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
+import com.capstone.nempatin.data.PropertyRepository
 import com.capstone.nempatin.data.network.ApiConfig
+import com.capstone.nempatin.domain.Property
 import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
 import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.utils.LocationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var nearbyAdapter: NearbyAdapter
@@ -46,8 +54,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val apiService = ApiConfig.getApiService()
-
-        viewModel = ViewModelProvider(this, PropertyViewModelFactory(apiService)).get(PropertyViewModel::class.java)
+        val propertyRepository = PropertyRepository(apiService)
+        viewModel = ViewModelProvider(this, PropertyViewModelFactory(propertyRepository)).get(PropertyViewModel::class.java)
 
         val nearbyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_nearby)
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -60,13 +68,12 @@ class HomeFragment : Fragment() {
         latestAddedRecyclerView.adapter = latestAddedAdapter
 
         // Here you observe the properties LiveData and update the adapters when the data changes
-        viewModel.properties.observe(viewLifecycleOwner, { properties ->
-            properties?.let {
-                nearbyAdapter.addProperties(it)
-                latestAddedAdapter.addProperties(it)
+        lifecycleScope.launch {
+            viewModel.pagedProperties.collect { pagingData: PagingData<Property> ->
+                nearbyAdapter.submitData(pagingData)
+                latestAddedAdapter.submitData(pagingData)
             }
-        })
-
+        }
         val profileButton: ImageButton = view.findViewById(R.id.profile_button)
         profileButton.setOnClickListener {
             val intent = Intent(activity, ProfileActivity::class.java)
@@ -150,7 +157,7 @@ class HomeFragment : Fragment() {
                     if (location != null) {
                         val latitude = location.latitude
                         val longitude = location.longitude
-                        filterNearestLocations(latitude, longitude)
+                        setupObservers(latitude, longitude)
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -159,15 +166,28 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun filterNearestLocations(latitude: Double, longitude: Double) {
-        viewModel.properties.observe(viewLifecycleOwner, { propertyList ->
-            propertyList?.let {
-                val filteredProperties = LocationUtils.filterNearestLocations(latitude, longitude, it)
-                nearbyAdapter.addProperties(filteredProperties)
-                latestAddedAdapter.addProperties(filteredProperties)
+
+    private fun setupObservers(latitude: Double, longitude: Double) {
+        lifecycleScope.launch {
+            viewModel.pagedProperties
+                .map { pagingData ->
+                    pagingData.filter { property ->
+                        LocationUtils.isNearby(latitude, longitude, property.latitude, property.longitude)
+                    }
+                }
+                .collectLatest { pagingData ->
+                    nearbyAdapter.submitData(pagingData)
+                }
+        }
+
+        lifecycleScope.launch {
+            viewModel.pagedProperties.collectLatest { pagingData ->
+                latestAddedAdapter.submitData(pagingData)
             }
-        })
+        }
     }
+
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001

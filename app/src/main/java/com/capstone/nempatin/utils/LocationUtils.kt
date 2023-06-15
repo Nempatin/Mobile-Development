@@ -3,30 +3,20 @@ package com.capstone.nempatin.utils
 import com.capstone.nempatin.domain.Property
 
 object LocationUtils {
-    fun filterNearestLocations(
+    fun isNearby(
         userLatitude: Double,
         userLongitude: Double,
-        properties: List<Property>
-    ): List<Property> {
-        // Implement the logic to filter the nearest locations based on user's latitude and longitude
-        // You can use the Haversine formula or any other distance calculation algorithm
+        propertyLatitude: Double,
+        propertyLongitude: Double
+    ): Boolean {
+        // Calculate the distance between the user's location and the property's location
+        val distance = calculateDistance(userLatitude, userLongitude, propertyLatitude, propertyLongitude)
 
-        // Example implementation:
-        val filteredProperties = properties.filter { property ->
-            val propertyLatitude = property.latitude
-            val propertyLongitude = property.longitude
+        // Define a threshold distance, e.g., 5 kilometers
+        val thresholdDistance = 5000 // meters
 
-            // Calculate the distance between the user's location and the property's location
-            val distance = calculateDistance(userLatitude, userLongitude, propertyLatitude, propertyLongitude)
-
-            // Define a threshold distance, e.g., 5 kilometers
-            val thresholdDistance = 5000 // meters
-
-            // Return true if the distance is within the threshold, indicating the property is near the user
-            distance <= thresholdDistance
-        }
-
-        return filteredProperties
+        // Return true if the distance is within the threshold, indicating the property is near the user
+        return distance <= thresholdDistance
     }
 
     private fun calculateDistance(
@@ -52,4 +42,3 @@ object LocationUtils {
         return distance * 1000 // Convert to meters
     }
 }
-
