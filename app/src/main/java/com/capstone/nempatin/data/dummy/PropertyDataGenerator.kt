@@ -2,7 +2,7 @@ package com.capstone.nempatin.data.dummy
 
 import com.capstone.nempatin.domain.Property
 
-class PropertyDataGenerator {
+/*class PropertyDataGenerator {
     fun createDummyPropertyList(): List<Property> {
         val propertyList = mutableListOf<Property>()
 
@@ -222,6 +222,4 @@ class PropertyDataGenerator {
     private fun generateTimestamp(): Long {
         return System.currentTimeMillis()
     }
-}
-
-
+}*/

@@ -10,9 +10,10 @@ interface ApiService {
     @GET("getAll")
     suspend fun getAllProperties(): Response<List<PropertyResponse>>
 
-    @GET("getPropertiesAfterId")
-    suspend fun getPropertiesAfterId(
-        @Query("lastPropertyId") lastPropertyId: String?,
-        @Query("limit") limit: Int
+    @GET("getAll")
+    suspend fun getProperties(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Response<List<PropertyResponse>>
+
 }

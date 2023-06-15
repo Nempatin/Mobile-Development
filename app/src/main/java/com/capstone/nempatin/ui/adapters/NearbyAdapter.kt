@@ -26,11 +26,6 @@ class NearbyAdapter : RecyclerView.Adapter<NearbyAdapter.PropertyViewHolder>() {
         return properties.size
     }
 
-    fun setProperties(properties: List<Property>) {
-        this.properties = properties.toMutableList()
-        notifyDataSetChanged()
-    }
-
     fun addProperties(properties: List<Property>) {
         this.properties.addAll(properties)
         notifyItemRangeInserted(this.properties.size - properties.size, properties.size)

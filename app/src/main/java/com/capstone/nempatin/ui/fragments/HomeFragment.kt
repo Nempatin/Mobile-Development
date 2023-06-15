@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.nempatin.R
-import com.capstone.nempatin.data.dummy.PropertyDataGenerator
+import com.capstone.nempatin.data.network.ApiConfig
 import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
 import com.capstone.nempatin.ui.profile.ProfileActivity
@@ -31,9 +31,7 @@ import com.google.android.gms.location.LocationServices
 class HomeFragment : Fragment() {
     private lateinit var nearbyAdapter: NearbyAdapter
     private lateinit var latestAddedAdapter: LatestAddedAdapter
-    private val viewModel by lazy {
-        ViewModelProvider(this, PropertyViewModelFactory(apiService)).get(PropertyViewModel::class.java)
-    }
+    lateinit var viewModel: PropertyViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,6 +45,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val apiService = ApiConfig.getApiService()
+
+        viewModel = ViewModelProvider(this, PropertyViewModelFactory(apiService)).get(PropertyViewModel::class.java)
+
         val nearbyRecyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_nearby)
         nearbyRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         nearbyAdapter = NearbyAdapter()
@@ -57,9 +59,12 @@ class HomeFragment : Fragment() {
         latestAddedAdapter = LatestAddedAdapter()
         latestAddedRecyclerView.adapter = latestAddedAdapter
 
+        // Here you observe the properties LiveData and update the adapters when the data changes
         viewModel.properties.observe(viewLifecycleOwner, { properties ->
-            nearbyAdapter.addProperties(properties)
-            latestAddedAdapter.addProperties(properties)
+            properties?.let {
+                nearbyAdapter.addProperties(it)
+                latestAddedAdapter.addProperties(it)
+            }
         })
 
         val profileButton: ImageButton = view.findViewById(R.id.profile_button)
@@ -155,12 +160,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun filterNearestLocations(latitude: Double, longitude: Double) {
-        val dataGenerator = PropertyDataGenerator()
-        val propertyList = dataGenerator.createDummyPropertyList()
-
-        val filteredProperties = LocationUtils.filterNearestLocations(latitude, longitude, propertyList)
-        nearbyAdapter.addProperties(filteredProperties)
-        latestAddedAdapter.addProperties(filteredProperties)
+        viewModel.properties.observe(viewLifecycleOwner, { propertyList ->
+            propertyList?.let {
+                val filteredProperties = LocationUtils.filterNearestLocations(latitude, longitude, it)
+                nearbyAdapter.addProperties(filteredProperties)
+                latestAddedAdapter.addProperties(filteredProperties)
+            }
+        })
     }
 
     companion object {

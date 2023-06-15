@@ -7,9 +7,9 @@ import kotlinx.coroutines.launch
 
 class PropertyViewModel(private val apiService: ApiService) : ViewModel() {
 
-    private var lastPropertyId: String? = null
-    private val _properties = MutableLiveData<List<Property>>()
-    val properties: LiveData<List<Property>> get() = _properties
+    private var offset: Int = 0
+    private val _properties = MutableLiveData<List<Property>?>()
+    val properties: MutableLiveData<List<Property>?> get() = _properties
 
     init {
         fetchProperties()
@@ -18,22 +18,36 @@ class PropertyViewModel(private val apiService: ApiService) : ViewModel() {
     fun fetchProperties() {
         viewModelScope.launch {
             try {
-                val response = apiService.getPropertiesAfterId(lastPropertyId, 5)
-                if (response.isSuccessful) { // check if the response is successful
-                    val propertiesList = response.body() // get the body of the response
-                    if (!propertiesList.isNullOrEmpty()) { // check if the properties list is not empty
-                        lastPropertyId = propertiesList.last().id
-                        _properties.value = propertiesList
-                    }
-                } else {
-                    // Handle the case when the API call is not successful
+                val response = apiService.getProperties(offset, 5)
+                val properties = response.body()?.mapIndexed { index, propertyResponse ->
+                    Property(
+                        id = offset + index + 1,
+                        name = propertyResponse.name,
+                        city = propertyResponse.city,
+                        latitude = propertyResponse.latitude,
+                        longitude = propertyResponse.longitude,
+                        price = propertyResponse.price,
+                        buildingArea = propertyResponse.buildingArea,
+                        landArea = propertyResponse.landArea,
+                        bedrooms = propertyResponse.bedrooms,
+                        bathrooms = propertyResponse.bathrooms,
+                        garage = propertyResponse.garage,
+                        certificate = propertyResponse.certificate,
+                        phoneNumber = propertyResponse.phoneNumber,
+                        timestamp = System.currentTimeMillis()
+                    )
                 }
+                offset += 5
+                _properties.value = properties
             } catch (e: Exception) {
                 // handle error
             }
         }
     }
 }
+
+
+
 
 
 
