@@ -1,6 +1,6 @@
 # Mobile-Development
 
-## Access to affordable housing is a critical issue in Indonesia due to rapid urbanization and population growth. Demand exceeds supply, causing a housing crisis in urban and rural areas. Our team seeks a tech-driven solution to enhance property transaction efficiency and reliability. By leveraging technology, we aim to streamline transactions, improve user experience, and promote sustainable urbanization.
+### Access to affordable housing is a critical issue in Indonesia due to rapid urbanization and population growth. Demand exceeds supply, causing a housing crisis in urban and rural areas. Our team seeks a tech-driven solution to enhance property transaction efficiency and reliability. By leveraging technology, we aim to streamline transactions, improve user experience, and promote sustainable urbanization.
 
 ## Screen shoot
 
