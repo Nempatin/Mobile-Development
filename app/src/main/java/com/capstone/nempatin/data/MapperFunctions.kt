@@ -3,9 +3,9 @@ package com.capstone.nempatin.data
 import com.capstone.nempatin.data.response.property.PropertyResponse
 import com.capstone.nempatin.domain.Property
 
-fun mapResponseToDomain(propertyResponse: PropertyResponse, id: Int): Property {
+fun mapResponseToDomain(propertyResponse: PropertyResponse): Property {
     return Property(
-        id = id,
+        id = propertyResponse.id,
         name = propertyResponse.name,
         city = propertyResponse.city,
         latitude = propertyResponse.latitude,
@@ -21,4 +21,5 @@ fun mapResponseToDomain(propertyResponse: PropertyResponse, id: Int): Property {
         timestamp = System.currentTimeMillis()
     )
 }
+
 

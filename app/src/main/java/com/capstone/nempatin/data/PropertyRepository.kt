@@ -14,7 +14,8 @@ class PropertyRepository(private val apiService: ApiService) {
     fun fetchProperties(): Flow<PagingData<Property>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 5,
+                pageSize = 15,
+                prefetchDistance = 10,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { PropertyPagingSource(apiService) }

@@ -8,6 +8,7 @@ data class PropertyResponse(
     @SerializedName("LAT") val latitude: Double,
     @SerializedName("LONG") val longitude: Double,
     @SerializedName("HARGA") val price: Long,
+    @SerializedName("ID") val id :Int,
     @SerializedName("LB") val buildingArea: Int,
     @SerializedName("LT") val landArea: Int,
     @SerializedName("KT") val bedrooms: Int,

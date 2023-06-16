@@ -15,20 +15,25 @@ class PropertyPagingSource(
 ) : PagingSource<Int, Property>() {
 
     override fun getRefreshKey(state: PagingState<Int, Property>): Int? {
-        return state.anchorPosition
+        return null
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Property> {
+        val page = params.key ?: 1
         return try {
-            val nextPageNumber = params.key ?: 0
-            val response = apiService.getProperties(nextPageNumber * params.loadSize, params.loadSize)
+            val response = apiService.getProperties(page, params.loadSize)
+            // If the response is successful and we got the properties, map them into the domain model.
+            if (response.isSuccessful && response.body() != null) {
+                val propertyResponses = response.body()!!
 
-            val propertyResponses = response.body()
-            if (propertyResponses != null) {
+                val properties = propertyResponses.map { propertyResponse ->
+                    mapResponseToDomain(propertyResponse)
+                }
+
                 LoadResult.Page(
-                    data = propertyResponses.mapIndexed { index, propertyResponse -> mapResponseToDomain(propertyResponse, nextPageNumber * params.loadSize + index + 1) },
-                    prevKey = if (nextPageNumber > 0) nextPageNumber - 1 else null,
-                    nextKey = if (propertyResponses.isNotEmpty()) nextPageNumber + 1 else null
+                    data = properties,
+                    prevKey = if (page > 1) page - 1 else null,
+                    nextKey = if (propertyResponses.isNotEmpty()) page + 1 else null
                 )
             } else {
                 LoadResult.Error(HttpException(response))
@@ -40,6 +45,8 @@ class PropertyPagingSource(
         }
     }
 
-
-
 }
+
+
+
+

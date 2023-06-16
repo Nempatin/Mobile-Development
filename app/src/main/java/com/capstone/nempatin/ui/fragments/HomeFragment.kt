@@ -28,6 +28,8 @@ import com.capstone.nempatin.data.network.ApiConfig
 import com.capstone.nempatin.domain.Property
 import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
+import com.capstone.nempatin.ui.custom.ScaleCenterItemDecoration
+import com.capstone.nempatin.ui.custom.ScaleCenterSnapHelper
 import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.utils.LocationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -66,6 +68,11 @@ class HomeFragment : Fragment() {
         latestAddedRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         latestAddedAdapter = LatestAddedAdapter()
         latestAddedRecyclerView.adapter = latestAddedAdapter
+
+        val snapHelper2 = ScaleCenterSnapHelper()
+
+        snapHelper2.attachToRecyclerView(latestAddedRecyclerView)
+
 
         // Here you observe the properties LiveData and update the adapters when the data changes
         lifecycleScope.launch {
@@ -169,23 +176,19 @@ class HomeFragment : Fragment() {
 
     private fun setupObservers(latitude: Double, longitude: Double) {
         lifecycleScope.launch {
-            viewModel.pagedProperties
-                .map { pagingData ->
-                    pagingData.filter { property ->
-                        LocationUtils.isNearby(latitude, longitude, property.latitude, property.longitude)
-                    }
-                }
-                .collectLatest { pagingData ->
-                    nearbyAdapter.submitData(pagingData)
-                }
-        }
-
-        lifecycleScope.launch {
             viewModel.pagedProperties.collectLatest { pagingData ->
+                // Distribute all properties to the latestAddedAdapter
                 latestAddedAdapter.submitData(pagingData)
+
+                // Filter nearby properties and set them to the nearbyAdapter
+                val nearbyPagingData = pagingData.filter { property ->
+                    LocationUtils.isNearby(latitude, longitude, property.latitude, property.longitude)
+                }
+                nearbyAdapter.submitData(nearbyPagingData)
             }
         }
     }
+
 
 
 

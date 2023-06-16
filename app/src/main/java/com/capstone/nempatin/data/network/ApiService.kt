@@ -12,8 +12,8 @@ interface ApiService {
 
     @GET("getAll")
     suspend fun getProperties(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Query("page") page: Int,
+        @Query("size") size: Int
     ): Response<List<PropertyResponse>>
 
 }
