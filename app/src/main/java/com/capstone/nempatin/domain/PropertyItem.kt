@@ -1,6 +1,7 @@
 package com.capstone.nempatin.domain
 
 data class Property(
+    val photo: String,
     val id: Int,
     val name: String,
     val city: String,

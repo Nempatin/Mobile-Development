@@ -5,6 +5,7 @@ import com.capstone.nempatin.domain.Property
 
 fun mapResponseToDomain(propertyResponse: PropertyResponse): Property {
     return Property(
+        photo = propertyResponse.photo,
         id = propertyResponse.id,
         name = propertyResponse.name,
         city = propertyResponse.city,

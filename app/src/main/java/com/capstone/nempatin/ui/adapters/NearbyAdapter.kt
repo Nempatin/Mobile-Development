@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.capstone.nempatin.R
 import com.capstone.nempatin.domain.Property
 
@@ -35,6 +37,17 @@ class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHold
             titleTextView.text = property.name
             priceTextView.text = property.price.toString()
             contentTextView.text = property.city
+
+            // Load property image with Glide
+            Glide.with(itemView.context)
+                .load(property.photo)
+                .apply(
+                    RequestOptions()
+                        .override(500, 500)
+                        .centerCrop()
+                        .placeholder(R.drawable.download)
+                )
+                .into(imageView)
         }
     }
 

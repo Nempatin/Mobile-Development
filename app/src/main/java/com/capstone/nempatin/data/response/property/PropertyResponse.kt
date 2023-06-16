@@ -3,6 +3,7 @@ package com.capstone.nempatin.data.response.property
 import com.google.gson.annotations.SerializedName
 
 data class PropertyResponse(
+    @SerializedName("FOTO") val photo: String,
     @SerializedName("NAMA") val name: String,
     @SerializedName("KOTA") val city: String,
     @SerializedName("LAT") val latitude: Double,

@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.capstone.nempatin.BuildConfig.GOOGLE_PLACES_API_KEY
 import com.capstone.nempatin.R
 import com.capstone.nempatin.data.network.ApiConfigPlaces
@@ -60,6 +62,17 @@ class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.Proper
             garageImageView.visibility = if (property.garage == "ada") View.VISIBLE else View.GONE
 
             priceTextView.text = property.price.toString()
+
+            // Load property image
+            Glide.with(itemView.context)
+                .load(property.photo)
+                .apply(
+                    RequestOptions()
+                        .override(500, 500)
+                        .centerCrop()
+                        .placeholder(R.drawable.download)
+                )
+                .into(imageView)
 
             // Fetch placeId from Google Geocoding API
             val callGeocoding = ApiConfigPlaces.service.getGeocoding(

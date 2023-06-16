@@ -50,36 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/bedroom_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:contentDescription="@string/bedroom"
-                        android:src="@drawable/ic_bedroom" />
-
-                    <ImageView
-                        android:id="@+id/bathroom_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:contentDescription="@string/bathroom"
-                        android:src="@drawable/ic_bathroom" />
-
-                    <ImageView
-                        android:id="@+id/garage_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:contentDescription="@string/garage"
-                        android:src="@drawable/ic_garage" />
-
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,7 +73,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Location"
+                        android:text="Price"
                         android:textColor="@color/colorOnQuaternary"
                         android:textSize="16sp" />
                 </LinearLayout>
