@@ -1,29 +1,27 @@
-package com.capstone.nempatin.ui.auth.login
+package com.capstone.nempatin.ui.auth.register
 
 import android.content.Intent
 import android.os.Bundle
-import android.service.controls.ControlsProviderService.TAG
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.nempatin.R
-import com.capstone.nempatin.databinding.ActivityLoginBinding
-import com.capstone.nempatin.ui.auth.register.SignUpActivity
+import com.capstone.nempatin.databinding.ActivitySignupBinding
+import com.capstone.nempatin.ui.auth.login.LoginActivity
 import com.capstone.nempatin.ui.main.MainActivity
+import com.capstone.nempatin.utils.UiUpdater
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_signup)
 
         auth = FirebaseAuth.getInstance()
 
@@ -33,16 +31,18 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        val emailInput = findViewById<EditText>(R.id.et_email_input)
-        val passwordInput = findViewById<EditText>(R.id.et_password_input)
-        val loginButton = findViewById<Button>(R.id.btn_login)
+        val emailInput = findViewById<EditText>(R.id.et_email_input_signup)
+        val passwordInput = findViewById<EditText>(R.id.et_password_input_signup)
+        val confirmPasswordInput = findViewById<EditText>(R.id.et_confirm_password_input_signup)
+        val signupButton = findViewById<Button>(R.id.btn_signup)
 
-        loginButton.setOnClickListener {
+        signupButton.setOnClickListener {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
+            val confirmPassword = confirmPasswordInput.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                auth.signInWithEmailAndPassword(email, password)
+            if (email.isNotEmpty() && password.isNotEmpty() && password == confirmPassword) {
+                auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             startActivity(Intent(this, MainActivity::class.java))
@@ -54,9 +54,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        val signupLink = findViewById<TextView>(R.id.tv_signup)
-        signupLink.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
+        val loginLink = findViewById<TextView>(R.id.tv_login)
+        loginLink.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 }
+
