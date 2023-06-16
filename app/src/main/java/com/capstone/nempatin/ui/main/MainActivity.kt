@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.capstone.nempatin.R
 import com.capstone.nempatin.ui.fragments.FavoriteFragment
 import com.capstone.nempatin.ui.fragments.HomeFragment
+import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.ui.upload.UploadActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -25,15 +26,11 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.navigation_add -> {
+                R.id.navigation_profile -> {
                     // Start AddActivity instead of replacing the fragment
-                    val intent = Intent(this, UploadActivity::class.java)
+                    val intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
                     true
-                }
-                R.id.navigation_favorite -> {
-                    replaceFragment(FavoriteFragment())
-                    return@setOnNavigationItemSelectedListener true
                 }
                 else -> false
             }

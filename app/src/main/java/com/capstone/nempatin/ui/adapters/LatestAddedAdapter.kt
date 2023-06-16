@@ -1,25 +1,23 @@
 package com.capstone.nempatin.ui.adapters
 
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.capstone.nempatin.BuildConfig.GOOGLE_PLACES_API_KEY
 import com.capstone.nempatin.R
-import com.capstone.nempatin.data.network.ApiConfigPlaces
-import com.capstone.nempatin.data.response.geocoding.GeocodingResponse
 import com.capstone.nempatin.domain.Property
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.capstone.nempatin.ui.detail.DetailActivity
 
-class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.PropertyViewHolder>(PropertyDiffCallback()) {
+class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.PropertyViewHolder>(
+    NearbyAdapter.PropertyDiffCallback()
+) {
 
     // define listener
     var onItemClickListener: ((Property) -> Unit)? = null
@@ -36,9 +34,27 @@ class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.Proper
             // here we use the listener
             holder.itemView.setOnClickListener {
                 onItemClickListener?.invoke(property)
+
+                val intent = Intent(holder.itemView.context, DetailActivity::class.java).apply {
+                    putExtra(DetailActivity.EXTRA_ID, property.id)
+                    putExtra(DetailActivity.EXTRA_NAME, property.name)
+                    putExtra(DetailActivity.EXTRA_PHOTO, property.photo)
+                    putExtra(DetailActivity.EXTRA_CITY, property.city)
+                    putExtra(DetailActivity.EXTRA_PRICE, property.price)
+                    putExtra(DetailActivity.EXTRA_BUILDING_AREA, property.buildingArea)
+                    putExtra(DetailActivity.EXTRA_LAND_AREA, property.landArea)
+                    putExtra(DetailActivity.EXTRA_BEDROOMS, property.bedrooms)
+                    putExtra(DetailActivity.EXTRA_BATHROOMS, property.bathrooms)
+                    putExtra(DetailActivity.EXTRA_GARAGE, property.garage)
+                    putExtra(DetailActivity.EXTRA_CERTIFICATE, property.certificate)
+                    putExtra(DetailActivity.EXTRA_PHONE_NUMBER, property.phoneNumber)
+                }
+                holder.itemView.context.startActivity(intent)
             }
+
         }
     }
+
 
 
     inner class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -52,7 +68,7 @@ class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.Proper
         private val certificateImageView: ImageView = itemView.findViewById(R.id.certificate_icon)
         private val garageImageView: ImageView = itemView.findViewById(R.id.garage_icon)
         private val priceTextView: TextView = itemView.findViewById(R.id.text_view_price)
-        val placeIdTextView: TextView = itemView.findViewById(R.id.text_view_placeid)
+
 
         fun bind(property: Property) {
             // Bind property data to views
@@ -82,38 +98,4 @@ class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.Proper
                 )
                 .into(imageView)
 
-            // Fetch placeId from Google Geocoding API
-            val callGeocoding = ApiConfigPlaces.service.getGeocoding(
-                "${property.latitude},${property.longitude}",
-                GOOGLE_PLACES_API_KEY
-            )
-
-            callGeocoding.enqueue(object : Callback<GeocodingResponse> {
-                override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
-                    val geocodingResults = response.body()?.results
-                    if (geocodingResults != null && geocodingResults.isNotEmpty()) {
-                        val placeId = geocodingResults[0].placeId
-                        property.placeId = placeId
-
-                        // Set the placeId to TextView
-                        placeIdTextView.text = "Place ID: ${property.placeId}"
-                    }
-                }
-
-                override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-                    // Handle the error
-                }
-            })
-        }
-    }
-
-    class PropertyDiffCallback : DiffUtil.ItemCallback<Property>() {
-        override fun areItemsTheSame(oldItem: Property, newItem: Property): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Property, newItem: Property): Boolean {
-            return oldItem == newItem
-        }
-    }
-}
+}}}

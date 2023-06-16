@@ -56,23 +56,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("test","test")
 
-        nearbyAdapter = NearbyAdapter().apply {
-            onItemClickListener = { property ->
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_ID, property.id)
-                startActivity(intent)
-            }
-        }
-
-
-        latestAddedAdapter = LatestAddedAdapter().apply {
-            onItemClickListener = { property ->
-                val intent = Intent(activity, DetailActivity::class.java)
-                intent.putExtra(DetailActivity.EXTRA_ID, property.id)
-                startActivity(intent)
-            }
-        }
-
         val apiService = ApiConfig.getApiService()
         val propertyRepository = PropertyRepository(apiService)
         viewModel = ViewModelProvider(this, PropertyViewModelFactory(propertyRepository)).get(PropertyViewModel::class.java)

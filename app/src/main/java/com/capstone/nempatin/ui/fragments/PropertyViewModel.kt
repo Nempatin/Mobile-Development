@@ -6,7 +6,7 @@ import com.capstone.nempatin.data.PropertyRepository
 
 
 
-class PropertyViewModel(private val repository: PropertyRepository) : ViewModel() {
+class PropertyViewModel(repository: PropertyRepository) : ViewModel() {
 
     val pagedProperties = repository.fetchProperties().cachedIn(viewModelScope)
 }
