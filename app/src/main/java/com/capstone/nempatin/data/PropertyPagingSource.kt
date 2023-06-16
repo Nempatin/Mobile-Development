@@ -26,7 +26,7 @@ class PropertyPagingSource(
             if (response.isSuccessful && response.body() != null) {
                 val propertyResponses = response.body()!!
 
-                val properties = propertyResponses.map { propertyResponse ->
+                var properties = propertyResponses.map { propertyResponse ->
                     mapResponseToDomain(propertyResponse)
                 }
 
