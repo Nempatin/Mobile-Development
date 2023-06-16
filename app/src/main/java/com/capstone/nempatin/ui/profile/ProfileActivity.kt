@@ -1,9 +1,11 @@
 package com.capstone.nempatin.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.capstone.nempatin.databinding.ActivityProfileBinding
+import com.capstone.nempatin.ui.auth.login.LoginActivity
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -20,7 +22,12 @@ class ProfileActivity : AppCompatActivity() {
 
         binding.signOut.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            // You might want to navigate the user back to the Login screen after signing out
+
+            // Navigate user back to LoginActivity after signing out
+            val intent = Intent(this, LoginActivity::class.java)
+            // Clear all activities on the stack for a fresh start
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 

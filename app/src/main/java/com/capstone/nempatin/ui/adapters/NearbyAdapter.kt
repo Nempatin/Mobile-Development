@@ -1,3 +1,5 @@
+package com.capstone.nempatin.ui.adapters
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,9 @@ import com.capstone.nempatin.domain.Property
 
 class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHolder>(PropertyDiffCallback()) {
 
+    // define listener
+    var onItemClickListener: ((Property) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_property_2, parent, false)
         return PropertyViewHolder(view)
@@ -22,6 +27,10 @@ class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHold
         val property = getItem(position)
         if (property != null) {
             holder.bind(property)
+            // here we use the listener
+            holder.itemView.setOnClickListener {
+                onItemClickListener?.invoke(property)
+            }
         }
     }
 
@@ -61,4 +70,3 @@ class NearbyAdapter : PagingDataAdapter<Property, NearbyAdapter.PropertyViewHold
         }
     }
 }
-

@@ -14,5 +14,11 @@
     <string name="bedroom">bedroom</string>
     <string name="bathroom">bathroom</string>
     <string name="garage">garage</string>
+    <string name="luas_tanah_title">land area</string>
+    <string name="luas_bangunan_title">building area</string>
+    <string name="price_title">price</string>
+    <string name="contact_title">contactdetail</string>
+    <string name="property_city">city</string>
+    <string name="property_name">property name</string>
 
 </resources>

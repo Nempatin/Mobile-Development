@@ -21,6 +21,9 @@ import retrofit2.Response
 
 class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.PropertyViewHolder>(PropertyDiffCallback()) {
 
+    // define listener
+    var onItemClickListener: ((Property) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_property, parent, false)
         return PropertyViewHolder(view)
@@ -30,8 +33,13 @@ class LatestAddedAdapter : PagingDataAdapter<Property, LatestAddedAdapter.Proper
         val property = getItem(position)
         if (property != null) {
             holder.bind(property)
+            // here we use the listener
+            holder.itemView.setOnClickListener {
+                onItemClickListener?.invoke(property)
+            }
         }
     }
+
 
     inner class PropertyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.image_view_placeholder)

@@ -1,6 +1,5 @@
 package com.capstone.nempatin.ui.fragments
 
-import NearbyAdapter
 import android.view.View
 import androidx.core.util.Pair
 import android.Manifest
@@ -29,14 +28,14 @@ import com.capstone.nempatin.data.network.ApiConfig
 import com.capstone.nempatin.domain.Property
 import com.capstone.nempatin.ui.SearchActivity
 import com.capstone.nempatin.ui.adapters.LatestAddedAdapter
-import com.capstone.nempatin.ui.custom.ScaleCenterItemDecoration
+import com.capstone.nempatin.ui.adapters.NearbyAdapter
 import com.capstone.nempatin.ui.custom.ScaleCenterSnapHelper
+import com.capstone.nempatin.ui.detail.DetailActivity
 import com.capstone.nempatin.ui.profile.ProfileActivity
 import com.capstone.nempatin.utils.LocationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -56,6 +55,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("test","test")
+
+        nearbyAdapter = NearbyAdapter().apply {
+            onItemClickListener = { property ->
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_ID, property.id)
+                startActivity(intent)
+            }
+        }
+
+
+        latestAddedAdapter = LatestAddedAdapter().apply {
+            onItemClickListener = { property ->
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_ID, property.id)
+                startActivity(intent)
+            }
+        }
 
         val apiService = ApiConfig.getApiService()
         val propertyRepository = PropertyRepository(apiService)

@@ -1,9 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.detail.DetailActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_property_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="property image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tv_property_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_property_image"
+            tools:text="@string/property_name" />
+
+        <TextView
+            android:id="@+id/tv_property_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_property_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_property_name"
+            tools:text="@string/property_city" />
+
+        <ImageView
+            android:id="@+id/iv_icon_bed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="bed icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_property_location"
+            app:srcCompat="@drawable/ic_bedroom" />
+
+        <TextView
+            android:id="@+id/tv_total_bed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon_bed"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_bed"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_bed" />
+
+        <ImageView
+            android:id="@+id/iv_icon_bath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="bath icon"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon_bed"
+            app:srcCompat="@drawable/ic_bathroom" />
+
+        <TextView
+            android:id="@+id/tv_total_bath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon_bath"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon_bath"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_bath" />
+
+        <ImageView
+            android:id="@+id/iv_icon_garage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="garage icon"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon_bath"
+            app:srcCompat="@drawable/ic_garage" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:clickable="true"
+            android:contentDescription="@string/add"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_icon_garage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_icon_bed"
+            app:srcCompat="@drawable/ic_bookmark" />
+
+        <TextView
+            android:id="@+id/tv_title_lt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/luas_tanah_title"
+            app:layout_constraintStart_toStartOf="@+id/iv_icon_garage"
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon_garage" />
+
+        <TextView
+            android:id="@+id/tv_property_lt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_lt"
+            app:layout_constraintStart_toEndOf="@+id/tv_title_lt"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_lt" />
+
+        <TextView
+            android:id="@+id/tv_title_lb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/luas_bangunan_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_lt"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_lt" />
+
+        <TextView
+            android:id="@+id/tv_property_lb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_lb"
+            app:layout_constraintStart_toEndOf="@+id/tv_title_lb"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_lb" />
+
+        <TextView
+            android:id="@+id/tv_title_certificate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Certificate"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_lb"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_lb" />
+
+        <TextView
+            android:id="@+id/tv_certificate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="SHM"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title_certificate"
+            app:layout_constraintStart_toEndOf="@+id/tv_title_certificate"
+            app:layout_constraintTop_toTopOf="@+id/tv_title_certificate" />
+
+        <TextView
+            android:id="@+id/tv_title_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/price_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_lb"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_certificate" />
+
+        <TextView
+            android:id="@+id/tv_property_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_price"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_price"
+            tools:text="1000000" />
+
+        <TextView
+            android:id="@+id/tv_title_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/contact_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_property_price"
+            app:layout_constraintTop_toBottomOf="@+id/tv_property_price" />
+
+        <TextView
+            android:id="@+id/tv_contact_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_contact"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_contact"
+            tools:text="628xxxxxxxxx" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
